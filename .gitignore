@@ -1,0 +1,5 @@
+experimental/
+tdlib/
+.env
+venv
+__pycache__
