@@ -14,6 +14,8 @@ class Config(Iconfig):
         "APP_ID", 
         "TDJSON_LOCATION", 
         "WAITING_TIMEOUT", 
+        "HOST", 
+        "PORT", 
     ]
     def __init__(self) -> None:
         pass

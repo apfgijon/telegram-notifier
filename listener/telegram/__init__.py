@@ -1,10 +1,13 @@
+from collections import namedtuple
 from enum import Enum
 import json
 import sys
 from ctypes import *
 from typing import Callable
 from config import Iconfig
-from . import Listener
+from listener.telegram.types import TelegramMessage
+from model import IDB
+from .. import Listener, SocialMediaMessage
 
 
 class EventReceiverCode(str, Enum):
@@ -18,6 +21,13 @@ class EventReceiverCode(str, Enum):
     authorizationStateReady = "authorizationStateReady"
     
     foundChatMessages = "foundChatMessages"
+    error = "error"
+    chat = "chat"
+    file = "file"
+    updateNewChat = "updateNewChat"
+    updateChatPosition = "updateChatPosition"
+    updateChatAddedToList = "updateChatAddedToList"
+    updateFile = "updateFile"
 
 class EventSenderCode(str, Enum):
     setTdlibParameters = "setTdlibParameters"
@@ -26,9 +36,15 @@ class EventSenderCode(str, Enum):
     
     searchChatMessages = "searchChatMessages"
     checkAuthenticationCode = "checkAuthenticationCode"
+    supergroupFullInfo = "supergroupFullInfo"
+    getChat = "getChat"
+    getChats = "getChats"
+    getRemoteFile = "getRemoteFile"
+    downloadFile = "downloadFile"
 
 class TelegramListener(Listener):
-    def __init__(self, config: Iconfig):
+    def __init__(self, config: Iconfig, database: IDB):
+        self.database = database
         self.app_id = config.getenv("APP_ID")
         self.api_hash = config.getenv("API_HASH")
         self.waiting_timeout = config.getenv("WAITING_TIMEOUT")
@@ -70,7 +86,7 @@ class TelegramListener(Listener):
         
         self.connected = False
         self.authenticated= False
-        self.chat_id =  -1002225162063
+        self.chat_id =  -1002192247697
         
     def __td_send(self, query):
         query = json.dumps(query).encode('utf-8')
@@ -81,8 +97,6 @@ class TelegramListener(Listener):
         if result:
             result = json.loads(result.decode('utf-8'))
         return result
-    
-
 
     def __td_execute(self, query):
         query = json.dumps(query).encode('utf-8')
@@ -99,7 +113,6 @@ class TelegramListener(Listener):
                 
                 if event['@type'] == EventReceiverCode.updateAuthorizationState:
                     auth_state = event['authorization_state']
-                    
 
                     # if client is closed, we need to destroy it and create new client
                     if auth_state['@type'] == EventReceiverCode.authorizationStateClosed:
@@ -129,42 +142,88 @@ class TelegramListener(Listener):
                         self.connected = True
         return self.connected                        
 
-    def __listen_notification(self, callback: Callable[[str], None]):
+    def __listen_notification(self, callback: Callable[[SocialMediaMessage], None]):
         print("Ready!")
         while self.connected:
             event = self.__td_receive()
             if event:
-                if event['@type'] == EventReceiverCode.updateAuthorizationState:
-                    auth_state = event['authorization_state']
-                    if auth_state['@type'] == EventReceiverCode.authorizationStateClosed:
-                        return False
-                if event['@type'] == EventReceiverCode.updateNewMessage:
-                    
+                if event['@type'] == EventReceiverCode.updateNewMessage:                    
                     try:
-                        if event["message"]["chat_id"] == self.chat_id:
-                            callback(str(event["message"]["content"]["text"]["text"]))
+                        message = TelegramMessage(event["message"])
+                        
+                        callback(SocialMediaMessage(
+                                chat_id=message.chat_id,
+                                message_id=message.id,
+                                message_content=message.content.text.text,
+                                date=message.date,
+                            ))
                     except:
                         pass
-                if event["@type"] == EventReceiverCode.foundChatMessages:
+                elif event["@type"] == EventReceiverCode.foundChatMessages:
                     
                     for message in event["messages"]:
-                        try:    
-                            if message["chat_id"] == self.chat_id:
-                                callback(message["content"]["text"]["text"])
-                        except:
+                        try:
+                            message = TelegramMessage(message)
+                            callback(SocialMediaMessage(
+                                chat_id=message.chat_id,
+                                message_id=message.id,
+                                message_content=message.content.text.text,
+                                date=message.date,
+                            ))
+                        except Exception as e:
                             pass
+                elif event["@type"] == EventReceiverCode.error:
+                    print(f"ERROR: {event}")
+                elif event["@type"] == EventReceiverCode.chat:
+                    photo = None
+                    try:
+                        photo= event["photo"]["big"]["remote"]["id"]
+                    except:
+                        pass
+                    
+                    self.database.save_channel(event["id"], event["title"], photo)
+                    self.__td_send({'@type': EventSenderCode.searchChatMessages, 
+                                    'chat_id': event["id"],
+                                    'query': "",
+                                    'from_message_id': 0,
+                                    'offset': 0,
+                                    'limit': 20,
+                                    })
                         
+                    if photo:
+                        self.__td_send({'@type': EventSenderCode.getRemoteFile, "remote_file_id": event["photo"]["big"]["remote"]["id"]})
+                elif event["@type"] == EventReceiverCode.updateFile:
+                    self.database.img_channel(event["file"]["remote"]["id"], event["file"]["local"]["path"])
+                    pass
+                elif event["@type"] == EventReceiverCode.updateChatPosition:
+                    if (event["chat_id"] < 0):
+                        self.__td_send({'@type': EventSenderCode.getChat, "chat_id": event["chat_id"]})
+                elif event["@type"] == EventReceiverCode.file:
+                    self.__td_send({
+                        '@type': EventSenderCode.downloadFile, 
+                        "file_id": event["id"],
+                        "priority": 1,
+                        "offset": 0,
+                        "limit": 0,
+                        "synchronous": True,
+                    })
+          
                         
     def __init_communication(self):
         self.__td_execute({'@type': 'setLogVerbosityLevel', 'new_verbosity_level': 0, '@extra': 1.01234})
         self.__td_send({'@type': 'getOption', 'name': 'version', '@extra': 1.01234})
+
+    def __receive_base_data(self):
+        self.__td_send({'@type': EventSenderCode.getChats, 'limit': 100})
         
     def listen(self, callback: Callable[[str], None]) -> None:
 
         self.__init_communication()
         if not self.__authenticate():
             return
-        self.__td_send({'@type': EventSenderCode.searchChatMessages, "chat_id": self.chat_id, 'query': "", "from_message_id": 0, 'sender_id': None, "offset": 0, "limit": 20, 'filter':None})
+        
+        self.__receive_base_data()
+
         if not self.__listen_notification(callback):
             return
         else:

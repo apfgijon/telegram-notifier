@@ -1,0 +1,7 @@
+.message-container {
+    padding: 20px 20px;
+    display: flex;
+    align-items: center; 
+    gap: 10px 30px;
+    border-top: 1px solid grey;
+}

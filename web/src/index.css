@@ -1,0 +1,16 @@
+:root {
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  height: 100vh;
+  background-color: #313131;
+  background-image: url('/background.webp');
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: right top;
+}
+

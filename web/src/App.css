@@ -1,0 +1,71 @@
+#root {
+  width: 1580px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.main-grid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+}
+
+.card {
+  background-color: rgba(0, 100, 255, 0.2);  /* Blue with 20% opacity */
+  backdrop-filter: blur(2px);  /* This creates the blur effect */
+  -webkit-backdrop-filter: blur(2px);
+  margin: 10px;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgb(0, 50, 125, 0.1), 0 1px 3px rgb(0, 50, 125, 0.1);
+}
+
+ul {
+  margin: 0;
+}
+
+.menu-link {
+  color: antiquewhite;
+}
+
+li {
+  list-style-type: none;
+}
+
+.menu {
+  padding-bottom: 30px;
+}
+
+.menu li {
+  padding-top: 5px;
+}
+
+.menu-icon {
+  position: relative;
+  top:5px;
+  margin-right: 5px;
+}
+
+.channel-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+}
+
+.text-primary {
+  color: #F4F4F4;
+}
+
+h1 {
+  padding-left: 1em;
+}
+
+main {
+  display: flex;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.menu-logo {
+  width: 230px;
+}
