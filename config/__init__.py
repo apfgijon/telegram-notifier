@@ -10,6 +10,7 @@ class Iconfig():
 class Config(Iconfig):
 
     possible_variables =[
+        "LANGUAGE", 
         "API_HASH", 
         "APP_ID", 
         "TDJSON_LOCATION", 

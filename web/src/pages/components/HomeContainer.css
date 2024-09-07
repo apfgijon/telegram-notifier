@@ -1,7 +1,56 @@
 .message-container {
+    cursor: pointer;
+    position: relative;
     padding: 20px 20px;
     display: flex;
     align-items: center; 
     gap: 10px 30px;
     border-top: 1px solid grey;
+}
+
+.message-container:hover {
+    background-color: rgba(0, 100, 255, 0.2); ;
+}
+.message-container:active {
+    background-color: rgba(0, 100, 255, 0.3); ;
+}
+
+.date-container {
+    position: absolute;
+    color: rgb(0, 195, 255);
+    font-size: 13px;
+    top: 0;
+    right: 15px;
+}
+
+.tag-container {
+    position: absolute;
+    bottom: 6px;
+    right: 15px;
+    color: white;
+    font-size: 13px;
+    background-color: var(--bg-color);
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 1em;
+    font-weight:600;
+}
+
+.additional-info {
+    position: relative;
+    padding: 20px;
+}
+
+.additional-info .additional-typ {
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    padding-left: 30px;
+    margin-bottom: 10px;
+}
+.additional-info .additional-content {
+    color: white;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-bottom: 20px;
 }

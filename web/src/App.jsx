@@ -14,22 +14,22 @@ const Home = () => <h2>home</h2>;
 
 function App() {
   return (
-    <section class="main-grid">
-      <section class="menu-wrapper">
-        <div class="card">
-          <img src="/logo.webp" alt="" class="menu-logo"/>
+    <section className="main-grid">
+      <section className="menu-wrapper">
+        <div className="card">
+          <img src="/logo.webp" alt="" className="menu-logo"/>
         <nav className="menu">
           <ul>
             <li><Link href="/" style={{textDecoration: 'none'}}>
-            <span class="menu-link"><HomeIcon className='menu-icon' /> Home</span>
+            <span className="menu-link"><HomeIcon className='menu-icon' /> Home</span>
             </Link></li>
             <li><Link href="/channels" style={{textDecoration: 'none'}}>
-            <span class="menu-link" ><FormatListBulleted className='menu-icon' /> Channels</span></Link></li>
+            <span className="menu-link" ><FormatListBulleted className='menu-icon' /> Channels</span></Link></li>
           </ul>
         </nav>
         </div>
       </section>
-      <main class="card">
+      <main className="card">
         <Switch>
           <Route path="/" component={Messages} />
           <Route path="/channels" component={Channels} />

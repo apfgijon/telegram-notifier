@@ -12,8 +12,8 @@
 }
 
 .card {
-  background-color: rgba(0, 100, 255, 0.2);  /* Blue with 20% opacity */
-  backdrop-filter: blur(2px);  /* This creates the blur effect */
+  background-color: rgba(0, 100, 255, 0.2);
+  backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   margin: 10px;
   border-radius: 1rem;
@@ -49,7 +49,7 @@ li {
 .channel-img {
   width: 40px;
   height: 40px;
-  border-radius: 6px;
+  border-radius: 6rem;
 }
 
 .text-primary {
@@ -68,4 +68,8 @@ main {
 
 .menu-logo {
   width: 230px;
+}
+
+.d-none {
+  display: none;
 }

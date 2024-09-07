@@ -193,6 +193,7 @@ class TelegramListener(Listener):
                     if photo:
                         self.__td_send({'@type': EventSenderCode.getRemoteFile, "remote_file_id": event["photo"]["big"]["remote"]["id"]})
                 elif event["@type"] == EventReceiverCode.updateFile:
+                    print(event)
                     self.database.img_channel(event["file"]["remote"]["id"], event["file"]["local"]["path"])
                     pass
                 elif event["@type"] == EventReceiverCode.updateChatPosition:

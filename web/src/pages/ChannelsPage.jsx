@@ -37,9 +37,9 @@ const Channels = () => {
     return <div>Error!</div>;
   }
   return (
-    <section class="ChannelPage">
-        <h1 class="text-primary">Channels</h1>
-        <section class="ChannelPage-content">
+    <section className="ChannelPage">
+        <h1 className="text-primary">Channels</h1>
+        <section className="ChannelPage-content">
 
         {data.map(d => <article key={d.id}><ChannelContainer channel_info={d}></ChannelContainer></article>)}
         </section>

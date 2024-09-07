@@ -18,15 +18,16 @@ class Message(Base):
     message_id = Column(Integer, unique=True)
     date = Column(DateTime)
     chat_id = Column(Integer, ForeignKey('channel.id'), unique=False)
-    analysis = relationship("MessageTag", back_populates="message", uselist=False)
+    analysis = relationship("MessageTag", back_populates="message", uselist=True)
     channel = relationship("Channel", back_populates="messages", uselist=False)
 
 class MessageTag(Base):
     __tablename__ = 'message_tag'
 
     id = Column(Integer, primary_key=True)
+    typ = Column(String)
     tag = Column(String)
-    message_id = Column(Integer, ForeignKey('message.id'), unique=True)
+    message_id = Column(Integer, ForeignKey('message.id'))
     message = relationship("Message", back_populates="analysis")
     
 
@@ -45,7 +46,7 @@ class Channel(Base):
 class IDB():
     def save_message(self, new_message: SocialMediaMessage, chat_id:int) -> Union[Message, None]:
         pass
-    def save_message_tag(self, message: Message, tag:str):
+    def save_message_tag(self, message: Message, typ:str, tag:str):
         pass
     def save_channel(self, chat_id: int, name: str, photo_id: str = None):
         pass
@@ -61,6 +62,8 @@ class IDB():
         pass
     def set_channel_selected(self, chat_id: int, selected: bool):
         pass
+    def get_full_message(self, message_id: int):
+        pass
         
 
 class SQLAlchemyDB(IDB):
@@ -73,9 +76,10 @@ class SQLAlchemyDB(IDB):
         Session = sessionmaker(bind=engine)
         self.session = Session()
         
-    def save_message_tag(self, message: Message, tag:str):
+    def save_message_tag(self, message: Message, typ:str, tag:str):
         instance = MessageTag(
             message= message,
+            typ= typ,
             tag= tag,
         )
         self.session.add(instance)
@@ -158,3 +162,8 @@ class SQLAlchemyDB(IDB):
             instance.selected = selected
             self.session.commit()
     
+    def get_full_message(self, message_id: int):
+        instance = self.session.query(Message).join(Channel) \
+                .filter(Message.id == message_id) \
+                .options(selectinload(Message.analysis), selectinload(Message.channel)).first()
+        return instance

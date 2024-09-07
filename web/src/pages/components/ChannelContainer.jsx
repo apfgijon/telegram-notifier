@@ -22,15 +22,15 @@ const ChannelContainer = ({channel_info}) => {
             body: JSON.stringify({selected: !isChecked}),
           });
     }
-    return <section class="channel-container">
+    return <section className="channel-container">
         <WhiteBorderCheckbox
             checked={isChecked}
             onChange={on_change}
             name="dataCheckbox"
             color="primary"
           />
-        <img class="channel-img" src={`http://localhost:8080/api/get_channel_image/${channel_info.id}`} alt="" />
-        <span class="text-primary">{channel_info.name}</span>
+        <img className="channel-img" src={`http://localhost:8080/api/get_channel_image/${channel_info.id}`} alt="" />
+        <span className="text-primary">{channel_info.name}</span>
     </section>
 }
 
