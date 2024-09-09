@@ -5,6 +5,7 @@ import "@fontsource/open-sans/300.css"; // Light
 import "@fontsource/open-sans/400.css"; // Regular
 import "@fontsource/open-sans/600.css"; // Semi-bold
 import "@fontsource/open-sans/700.css"; // Bold
+import '@fontsource/material-icons';
 import './index.css'
 
 createRoot(document.getElementById('root')).render(

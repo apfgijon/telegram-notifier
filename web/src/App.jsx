@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch, Link } from "wouter";
 import HomeIcon from '@mui/icons-material/Home';
-import InfoIcon from '@mui/icons-material/Info';
 import FormatListBulleted from '@mui/icons-material/FormatListBulleted';
 import Channels from './pages/ChannelsPage';
 import Messages from './pages/HomePage';
@@ -9,8 +8,6 @@ import Messages from './pages/HomePage';
 import "./App.css";
 
 // Example components
-
-const Home = () => <h2>home</h2>;
 
 function App() {
   return (

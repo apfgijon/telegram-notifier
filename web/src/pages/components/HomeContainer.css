@@ -1,5 +1,4 @@
 .message-container {
-    cursor: pointer;
     position: relative;
     padding: 20px 20px;
     display: flex;
@@ -8,11 +7,17 @@
     border-top: 1px solid grey;
 }
 
-.message-container:hover {
-    background-color: rgba(0, 100, 255, 0.2); ;
-}
-.message-container:active {
-    background-color: rgba(0, 100, 255, 0.3); ;
+.drop-down-icon {
+    position: absolute;
+    color: white;
+    font-size: 13px;
+    top: 20px;
+    right: 15px;
+    font-family: 'Material Icons', sans-serif;
+    font-size: 25px;
+    user-select: none;
+    border-radius: 100%;
+    cursor: pointer;
 }
 
 .date-container {
@@ -39,6 +44,7 @@
 .additional-info {
     position: relative;
     padding: 20px;
+    overflow: hidden;
 }
 
 .additional-info .additional-typ {
@@ -53,4 +59,28 @@
     padding-left: 50px;
     padding-right: 50px;
     margin-bottom: 20px;
+}
+
+.message-content{
+    padding-right: 30px;
+}
+
+  
+.slide-enter {
+    max-height: 0;
+    opacity: 0;
+}
+.slide-enter-active {
+    max-height: 100px;
+    opacity: 1;
+    transition: max-height 300ms ease-in, opacity 300ms ease-in;
+}
+.slide-exit {
+    max-height: 100px;
+    opacity: 1;
+}
+.slide-exit-active {
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 300ms ease-out, opacity 300ms ease-out;
 }
