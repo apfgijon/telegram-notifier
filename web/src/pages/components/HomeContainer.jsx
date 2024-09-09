@@ -21,6 +21,14 @@ const tags = {
         tag: "Ucrania",
         color: "rgb(31, 134, 31)",
     },
+    "USA": {
+        tag: "EE.UU",
+        color: "rgb(187, 29, 187)",
+    },
+    "VENEZUELA": {
+        tag: "Venezuela",
+        color: "rgb(183, 183, 11)",
+    },
     "OTRO": {
         tag: "Otro",
         color: "grey",
