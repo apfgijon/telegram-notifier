@@ -7,6 +7,9 @@ Develop automated processors for messages from popular Telegram channels.
 
 Use LLMs for process the messages based on your own instructions.
 
+
+![ARAMO](https://github.com/user-attachments/assets/7b8eb5d0-f85c-4499-927b-e39f4af8d943)
+
 ## Setup
 ### 1. Install TDLib dynamic library
 Follow the instructions from [Td](https://github.com/tdlib/td) and build the library to have your `tdjson.dll`.
